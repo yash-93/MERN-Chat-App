@@ -1,0 +1,6 @@
+body {
+  background: url("../src//images/background.svg") no-repeat;
+  background-size: cover;
+  padding: 4%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
