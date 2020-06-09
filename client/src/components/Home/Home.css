@@ -18,5 +18,10 @@
 
 #login-form {
   text-align: center;
-  margin-top: 20vh;
+  margin-top: 15vh;
+}
+
+#switchBtn {
+  margin: 0 auto;
+  display: block;
 }

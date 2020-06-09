@@ -50,25 +50,37 @@ const Home = () => {
 
       <form onSubmit={submitHandler} id="login-form">
         {(loginForm || signupForm) && (
-          <Input
-            type="text"
-            placeholder="Username"
-            onChange={(event) => setUsername(event.target.value)}
-          />
+          <React.Fragment>
+            <Input
+              type="text"
+              placeholder="Username"
+              onChange={(event) => setUsername(event.target.value)}
+            />
+            <br></br>
+            <br></br>
+          </React.Fragment>
         )}
         {(loginForm || signupForm) && (
-          <Input
-            type="password"
-            placeholder="Password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
+          <React.Fragment>
+            <Input
+              type="password"
+              placeholder="Password"
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <br></br>
+            <br></br>
+          </React.Fragment>
         )}
         {signupForm && (
-          <Input
-            type="email"
-            placeholder="E-mail"
-            onChange={(event) => setPassword(event.target.value)}
-          />
+          <React.Fragment>
+            <Input
+              type="email"
+              placeholder="E-mail"
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <br></br>
+            <br></br>
+          </React.Fragment>
         )}
         {loginForm && <Button type="submit">LOG IN</Button>}
         {signupForm && <Button type="submit">SIGNUP</Button>}
@@ -78,6 +90,7 @@ const Home = () => {
         <div id="home-text">
           <h1>WELCOME</h1>
           <p>Please Log In or Sign Up to continue</p>
+          <br></br>
           <br></br>
           <i
             className="fas fa-arrow-right"
@@ -90,9 +103,12 @@ const Home = () => {
         </div>
       )}
       {!displayText && (
-        <Button onClick={switchHandler}>
-          SWITCH TO {loginForm ? "SIGNUP" : "LOGIN"}
-        </Button>
+        <React.Fragment>
+          <br></br>
+          <Button onClick={switchHandler} id="switchBtn">
+            SWITCH TO {loginForm ? "SIGNUP" : "LOGIN"}
+          </Button>
+        </React.Fragment>
       )}
     </React.Fragment>
   );
