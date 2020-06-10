@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 import Input from "../Shared/Input";
 import Button from "../Shared/Button";
@@ -11,6 +12,7 @@ const Home = () => {
   const [displayText, setDisplayText] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   const DUMMY_USER = [
     {
@@ -22,13 +24,24 @@ const Home = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    const foundUser = DUMMY_USER.find(
-      (user) => user.username === username && user.password === password
-    );
-    if (foundUser) {
-      window.location.href = `/${foundUser.id}`;
-    } else {
-      alert("Wrong Credentials.");
+    if (loginForm) {
+      const foundUser = DUMMY_USER.find(
+        (user) => user.username === username && user.password === password
+      );
+      if (foundUser) {
+        window.location.href = `/${foundUser.id}`;
+      } else {
+        alert("Wrong Credentials.");
+      }
+    } else if (signupForm) {
+      const newUser = {
+        id: uuidv4(),
+        username,
+        password,
+        email,
+      };
+      DUMMY_USER.push(newUser);
+      console.log(DUMMY_USER);
     }
   };
 
@@ -76,7 +89,7 @@ const Home = () => {
             <Input
               type="email"
               placeholder="E-mail"
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => setEmail(event.target.value)}
             />
             <br></br>
             <br></br>
