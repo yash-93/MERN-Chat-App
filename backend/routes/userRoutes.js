@@ -16,18 +16,25 @@ const DUMMY_USER = [
   },
 ];
 
-router.get("/login/:userid", (req, res, next) => {
-  const userId = req.params.userid;
-  const user = DUMMY_USER.find((u) => {
-    return u.id === userId;
-  });
+router.get("/login", async (req, res, next) => {
+  const { username, password } = req.body;
 
-  if (!user) {
-    const error = new Error("Could not find user.");
-    error.code = 404;
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ username: username });
+  } catch (err) {
+    const error = new Error("Login failed.");
+    error.code = "500";
     return next(error);
   }
-  res.json({ user });
+
+  if (!existingUser || existingUser.password !== password) {
+    const error = new Error("Inavlid Credenials.");
+    error.code = "401";
+    return next(error);
+  }
+
+  res.json({ message: "Logged In" });
 });
 
 router.post(
