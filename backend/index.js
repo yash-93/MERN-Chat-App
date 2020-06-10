@@ -3,6 +3,7 @@ const socketio = require("socket.io");
 const http = require("http");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const userRoutes = require("./routes/userRoutes");
 
@@ -22,4 +23,14 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occured" });
 });
 
-app.listen(5000);
+mongoose
+  .connect(
+    "mongodb+srv://chat_app_user:BSngbnMhVPbCv8uL@cluster0-fpul6.mongodb.net/chatapp?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
+  )
+  .then(() => {
+    app.listen(5000);
+  })
+  .catch((error) => {
+    console.log(err);
+  });

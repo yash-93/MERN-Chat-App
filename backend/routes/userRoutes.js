@@ -2,6 +2,8 @@ const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const { check, validationResult } = require("express-validator");
 
+const User = require("../models/user");
+
 const router = express.Router();
 
 const DUMMY_USER = [
@@ -13,8 +15,6 @@ const DUMMY_USER = [
     friends: ["u1", "u2"],
   },
 ];
-
-// router.post("/login", usersController.login);
 
 router.get("/login/:userid", (req, res, next) => {
   const userId = req.params.userid;
@@ -37,6 +37,53 @@ router.post(
     check("password").isLength({ min: 6 }),
     check("email").isEmail().normalizeEmail(),
   ],
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = new Error("Invalid Inputs passed.");
+      error.code = "422";
+      return next(error);
+    }
+
+    const { username, password, email, friends } = req.body;
+
+    let existingUser;
+    try {
+      existingUser = await User.findOne({ email: email });
+    } catch (err) {
+      const error = new Error("Sign Up failed.");
+      error.code = "500";
+      return next(error);
+    }
+
+    if (existingUser) {
+      const error = new Error("User already exists.");
+      error.code = "422";
+      return next(error);
+    }
+
+    const newUser = new User({
+      username,
+      password,
+      email,
+      friends,
+    });
+
+    try {
+      await newUser.save();
+    } catch (err) {
+      const error = new Error("Sign up failed.");
+      error.code = "500";
+      return next(error);
+    }
+
+    res.status(201).json({ user: newUser });
+  }
+);
+
+router.patch(
+  "/:uid",
+  [check("username").not().isEmpty(), check("password").isLength({ min: 6 })],
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -46,30 +93,16 @@ router.post(
       return next(error);
     }
 
-    const { username, password, email } = req.body;
-    const newUser = {
-      id: uuidv4(),
-      username,
-      password,
-      email,
-    };
+    const { username, password } = req.body;
+    const userId = req.params.uid;
+    const updatedUser = { ...DUMMY_USER.find((u) => u.id === userId) };
+    const userIndex = DUMMY_USER.findIndex((u) => u.id === userId);
+    updatedUser.username = username;
+    updatedUser.password = password;
+    DUMMY_USER[userIndex] = updatedUser;
 
-    DUMMY_USER.push(newUser);
-
-    res.status(201).json({ newUser });
+    res.status(200).json({ user: updatedUser });
   }
 );
-
-router.patch("/:uid", (req, res, next) => {
-  const { username, password } = req.body;
-  const userId = req.params.uid;
-  const updatedUser = { ...DUMMY_USER.find((u) => u.id === userId) };
-  const userIndex = DUMMY_USER.findIndex((u) => u.id === userId);
-  updatedUser.username = username;
-  updatedUser.password = password;
-  DUMMY_USER[userIndex] = updatedUser;
-
-  res.status(200).json({ user: updatedUser });
-});
 
 module.exports = router;
