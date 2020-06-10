@@ -9,6 +9,9 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 // const server = http.createServer(app);
 // const io = socketio(server);
+
+app.use(bodyParser.json());
+
 app.use("/api/users", userRoutes);
 
 app.use((error, req, res, next) => {
