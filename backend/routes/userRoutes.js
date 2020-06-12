@@ -91,7 +91,7 @@ router.post(
 router.patch(
   "/:uid",
   [check("username").not().isEmpty(), check("password").isLength({ min: 6 })],
-  (req, res, next) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors);
@@ -102,11 +102,29 @@ router.patch(
 
     const { username, password } = req.body;
     const userId = req.params.uid;
-    const updatedUser = { ...DUMMY_USER.find((u) => u.id === userId) };
-    const userIndex = DUMMY_USER.findIndex((u) => u.id === userId);
+
+    let updatedUser;
+    try {
+      updatedUser = await User.findById(userId);
+    } catch (err) {
+      const error = new Error("Something went wrong.");
+      error.code = "500";
+      return next(error);
+    }
+
+    // const updatedUser = { ...DUMMY_USER.find((u) => u.id === userId) };
+    // const userIndex = DUMMY_USER.findIndex((u) => u.id === userId);
     updatedUser.username = username;
     updatedUser.password = password;
-    DUMMY_USER[userIndex] = updatedUser;
+
+    try {
+      await updatedUser.save();
+    } catch (err) {
+      const error = new Error("Something went wrong.");
+      error.code = "500";
+      return next(error);
+    }
+    // DUMMY_USER[userIndex] = updatedUser;
 
     res.status(200).json({ user: updatedUser });
   }
