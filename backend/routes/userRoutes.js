@@ -16,6 +16,27 @@ const router = express.Router();
 //   },
 // ];
 
+router.get("/", async (req, res, next) => {
+  const { username } = req.body;
+
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ username: username });
+  } catch (err) {
+    const error = new Error("Something went wrong.");
+    error.code = "500";
+    return next(error);
+  }
+
+  if (!existingUser) {
+    const error = new Error("Inavlid Username.");
+    error.code = "401";
+    return next(error);
+  }
+
+  res.json({ user: existingUser });
+});
+
 router.get("/login", async (req, res, next) => {
   const { username, password } = req.body;
 
