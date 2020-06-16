@@ -6,15 +6,15 @@ const User = require("../models/user");
 
 const router = express.Router();
 
-const DUMMY_USER = [
-  {
-    id: "u1",
-    username: "yashdeep",
-    password: "yashdeep",
-    email: "yashdeep@yashdeep.com",
-    friends: ["u1", "u2"],
-  },
-];
+// const DUMMY_USER = [
+//   {
+//     id: "u1",
+//     username: "yashdeep",
+//     password: "yashdeep",
+//     email: "yashdeep@yashdeep.com",
+//     friends: ["u1", "u2"],
+//   },
+// ];
 
 router.get("/login", async (req, res, next) => {
   const { username, password } = req.body;
@@ -52,7 +52,7 @@ router.post(
       return next(error);
     }
 
-    const { username, password, email, friends } = req.body;
+    const { username, password, email } = req.body;
 
     let existingUser;
     try {
@@ -73,7 +73,8 @@ router.post(
       username,
       password,
       email,
-      friends,
+      requests: [],
+      friends: [],
     });
 
     try {
@@ -129,5 +130,65 @@ router.patch(
     res.status(200).json({ user: updatedUser });
   }
 );
+
+router.patch("/sendreq/:sid/:rid", async (req, res, next) => {
+  const sendersId = req.params.sid;
+  const receiverId = req.params.rid;
+
+  let receiverUser;
+  try {
+    receiverUser = await User.findById(receiverId);
+  } catch (err) {
+    const error = new Error("User does not exist, cant send request.");
+    error.code = "404";
+    return next(error);
+  }
+
+  receiverUser.requests.push(sendersId);
+
+  try {
+    await receiverUser.save();
+  } catch (err) {
+    const error = new Error("Something went wrong.");
+    error.code = "500";
+    return next(error);
+  }
+
+  res.status(200).json({ user: receiverUser });
+});
+
+router.patch("/acceptreq/:sid/:rid", async (req, res, next) => {
+  const sendersId = req.params.sid;
+  const receiverId = req.params.rid;
+
+  let receiverUser;
+  let senderUser;
+  try {
+    receiverUser = await User.findById(receiverId);
+    senderUser = await User.findById(sendersId);
+  } catch (err) {
+    const error = new Error("User not found.");
+    error.code = "404";
+    return next(error);
+  }
+
+  const index = receiverUser.requests.indexOf(sendersId);
+  if (index > -1) {
+    receiverUser.requests.splice(index, 1);
+  }
+  receiverUser.friends.push(sendersId);
+  senderUser.friends.push(receiverId);
+
+  try {
+    await receiverUser.save();
+    await senderUser.save();
+  } catch (err) {
+    const error = new Error("Something went wrong.");
+    error.code = "500";
+    return next(error);
+  }
+
+  res.status(200).json({ message: "Updated" });
+});
 
 module.exports = router;
