@@ -212,4 +212,42 @@ router.patch("/acceptreq/:sid/:rid", async (req, res, next) => {
   res.status(200).json({ message: "Updated" });
 });
 
+router.patch("/removefriend/:uid/:fid", async (req, res, next) => {
+  const userId = req.params.uid;
+  const friendId = req.params.fid;
+
+  let user;
+  let friend;
+  try {
+    user = await User.findById(userId);
+    friend = await User.findById(friendId);
+  } catch (err) {
+    const error = new Error("Something went wrong.");
+    error.code = "500";
+    return next(error);
+  }
+
+  let index;
+  index = user.friends.indexOf(friendId);
+  if (index > -1) {
+    user.friends.splice(index, 1);
+  }
+
+  index = friend.friends.indexOf(userId);
+  if (index > -1) {
+    friend.friends.splice(index, 1);
+  }
+
+  try {
+    await user.save();
+    await friend.save();
+  } catch (err) {
+    const error = new Error("Something went wrong.");
+    error.code = "500";
+    return next(error);
+  }
+
+  res.status(200).json({ message: "Updated" });
+});
+
 module.exports = router;
