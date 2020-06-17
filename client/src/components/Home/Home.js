@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import Input from "../Shared/Input";
 import Button from "../Shared/Button";
+import LoadingSpinner from "../Shared/LoadingSpinner";
 import "./Home.css";
 
 const Home = () => {
@@ -13,6 +14,8 @@ const Home = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const DUMMY_USER = [
     {
@@ -22,7 +25,7 @@ const Home = () => {
     },
   ];
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
     if (loginForm) {
       const foundUser = DUMMY_USER.find(
@@ -34,14 +37,31 @@ const Home = () => {
         alert("Wrong Credentials.");
       }
     } else if (signupForm) {
-      const newUser = {
-        id: uuidv4(),
-        username,
-        password,
-        email,
-      };
-      DUMMY_USER.push(newUser);
-      console.log(DUMMY_USER);
+      try {
+        setIsLoading(true);
+        const response = await fetch("http://localhost:5000/api/users/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password,
+            email: email,
+          }),
+        });
+
+        const responseData = await response.json();
+        if (!responseData.ok) {
+          throw new Error(responseData.message);
+        }
+        console.log(responseData);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+        setError(err.message || "Something went wrong.");
+      }
     }
   };
 
@@ -60,7 +80,7 @@ const Home = () => {
       <NavLink to="/" id="logo">
         CHAT APP
       </NavLink>
-
+      {isLoading && <LoadingSpinner asOverlay />}
       <form onSubmit={submitHandler} id="login-form">
         {(loginForm || signupForm) && (
           <React.Fragment>
