@@ -47,6 +47,7 @@ const Home = () => {
         }
         console.log(responseData);
         setIsLoading(false);
+        window.location.href = `/${responseData.id}`;
       } catch (err) {
         console.log(err);
         setIsLoading(false);
