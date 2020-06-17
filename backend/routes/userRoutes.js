@@ -59,7 +59,7 @@ router.get("/login", async (req, res, next) => {
 });
 
 router.post(
-  "/",
+  "/signup",
   [
     check("username").not().isEmpty(),
     check("password").isLength({ min: 6 }),
