@@ -37,7 +37,7 @@ router.get("/", async (req, res, next) => {
   res.json({ user: existingUser });
 });
 
-router.get("/login", async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
 
   let existingUser;

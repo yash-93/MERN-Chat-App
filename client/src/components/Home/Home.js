@@ -17,25 +17,49 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const DUMMY_USER = [
-    {
-      id: "u1",
-      username: "yashdeep",
-      password: "yashdeep",
-    },
-  ];
+  // const DUMMY_USER = [
+  //   {
+  //     id: "u1",
+  //     username: "yashdeep",
+  //     password: "yashdeep",
+  //   },
+  // ];
 
   const submitHandler = async (event) => {
     event.preventDefault();
     if (loginForm) {
-      const foundUser = DUMMY_USER.find(
-        (user) => user.username === username && user.password === password
-      );
-      if (foundUser) {
-        window.location.href = `/${foundUser.id}`;
-      } else {
-        alert("Wrong Credentials.");
+      try {
+        setIsLoading(true);
+        const response = await fetch("http://localhost:5000/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password,
+          }),
+        });
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+        console.log(responseData);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+        setError(err.message || "Something went wrong.");
       }
+      // const foundUser = DUMMY_USER.find(
+      //   (user) => user.username === username && user.password === password
+      // );
+      // if (foundUser) {
+      //   window.location.href = `/${foundUser.id}`;
+      // } else {
+      //   alert("Wrong Credentials.");
+      // }
     } else if (signupForm) {
       try {
         setIsLoading(true);
@@ -52,7 +76,7 @@ const Home = () => {
         });
 
         const responseData = await response.json();
-        if (!responseData.ok) {
+        if (!response.ok) {
           throw new Error(responseData.message);
         }
         console.log(responseData);
