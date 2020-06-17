@@ -55,7 +55,7 @@ router.post("/login", async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ message: "Logged In" });
+  res.json({ message: "Logged In", id: existingUser.id });
 });
 
 router.post(
