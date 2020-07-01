@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 import Input from "../Shared/Input";
 import Button from "../Shared/Button";
 import LoadingSpinner from "../Shared/LoadingSpinner";
+import { AuthContext } from "../Shared/Context/auth-context";
 import "./Home.css";
+import Friend from "../Chat/Friends/Friend";
 
 const Home = () => {
+  const auth = useContext(AuthContext);
   const [loginForm, setLoginForm] = useState(false);
   const [signupForm, setSignupForm] = useState(false);
   const [displayText, setDisplayText] = useState(true);
@@ -16,14 +19,6 @@ const Home = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-
-  // const DUMMY_USER = [
-  //   {
-  //     id: "u1",
-  //     username: "yashdeep",
-  //     password: "yashdeep",
-  //   },
-  // ];
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -34,6 +29,7 @@ const Home = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            // Authorization: "bearer" + auth.token,
           },
           body: JSON.stringify({
             username: username,
@@ -47,20 +43,22 @@ const Home = () => {
         }
         console.log(responseData);
         setIsLoading(false);
-        window.location.href = `/${responseData.id}`;
+        auth.login(responseData.id, responseData.token, responseData.friends);
+        localStorage.setItem(
+          "userData",
+          JSON.stringify({
+            userId: responseData.id,
+            token: responseData.token,
+            friends: responseData.friends,
+          })
+        );
+        // history.replace(`/${responseData.id}`);
+        window.location.replace(`/${responseData.id}`);
       } catch (err) {
         console.log(err);
         setIsLoading(false);
         setError(err.message || "Something went wrong.");
       }
-      // const foundUser = DUMMY_USER.find(
-      //   (user) => user.username === username && user.password === password
-      // );
-      // if (foundUser) {
-      //   window.location.href = `/${foundUser.id}`;
-      // } else {
-      //   alert("Wrong Credentials.");
-      // }
     } else if (signupForm) {
       try {
         setIsLoading(true);

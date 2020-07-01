@@ -16,3 +16,9 @@ button:hover {
   color: black;
   background-color: white;
 }
+
+#sendMsg {
+  background: black;
+  color: white;
+  border-radius: 10%;
+}

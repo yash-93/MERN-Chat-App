@@ -1,27 +1,20 @@
 const express = require("express");
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
 const { check, validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
+const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
-// const DUMMY_USER = [
-//   {
-//     id: "u1",
-//     username: "yashdeep",
-//     password: "yashdeep",
-//     email: "yashdeep@yashdeep.com",
-//     friends: ["u1", "u2"],
-//   },
-// ];
-
-router.get("/", async (req, res, next) => {
-  const { username } = req.body;
+router.get("/:uid", async (req, res, next) => {
+  //const { username } = req.body;
 
   let existingUser;
   try {
-    existingUser = await User.findOne({ username: username });
+    // existingUser = await User.findOne({ username: username });
+    existingUser = await User.findById(req.params.uid);
   } catch (err) {
     const error = new Error("Something went wrong.");
     error.code = "500";
@@ -39,6 +32,7 @@ router.get("/", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
+  var io = req.app.get("socketio");
 
   let existingUser;
   try {
@@ -55,7 +49,26 @@ router.post("/login", async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ message: "Logged In", id: existingUser.id });
+  let token;
+  try {
+    token = jwt.sign(
+      {
+        userId: existingUser.id,
+        email: existingUser.email,
+      },
+      "secret_key"
+    );
+  } catch (err) {
+    const error = new Error("Login failed, try again later.");
+    error.code = "500";
+    return next(error);
+  }
+
+  res.json({
+    id: existingUser.id,
+    token: token,
+    friends: existingUser.friends,
+  });
 });
 
 router.post(
@@ -105,10 +118,26 @@ router.post(
       error.code = "500";
       return next(error);
     }
+    let token;
+    try {
+      token = jwt.sign(
+        {
+          userId: newUser.id,
+          email: newUser.email,
+        },
+        "secret_key"
+      );
+    } catch (err) {
+      const error = new Error("Signup failed, try again later.");
+      error.code = "500";
+      return next(error);
+    }
 
-    res.status(201).json({ user: newUser });
+    res.status(201).json({ user: newUser, token: token });
   }
 );
+
+// router.use(checkAuth);
 
 router.patch(
   "/:uid",
