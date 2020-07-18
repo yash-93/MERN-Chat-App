@@ -43,7 +43,7 @@ const Home = () => {
         }
         console.log(responseData);
         setIsLoading(false);
-        auth.login(responseData.id, responseData.token, responseData.friends);
+        //auth.login(responseData.id, responseData.token, responseData.friends);
         localStorage.setItem(
           "userData",
           JSON.stringify({

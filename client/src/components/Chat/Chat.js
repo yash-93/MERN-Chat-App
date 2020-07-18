@@ -15,6 +15,7 @@ const Chat = () => {
   const ENDPOINT = "http://localhost:5000";
   var user;
   var friendIdList;
+  // var userId;
 
   // useEffect(() => {
   //   socket = io("http://localhost:5000");
@@ -52,6 +53,7 @@ const Chat = () => {
         const result = await fetch(
           `http://localhost:5000/api/users/${user.userId}`
         );
+        // userId = user.userId;
         const responseData = await result.json();
         friendIdList = responseData.user.friends;
         console.log(friendIdList.length);
@@ -71,6 +73,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
+    // socket.emit("join", { user, userId }, () => {});
     socket.emit("join", { user }, () => {});
     console.log(socket);
   }, []);
