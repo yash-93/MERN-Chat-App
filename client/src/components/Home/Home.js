@@ -1,16 +1,16 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 // import { v4 as uuidv4 } from "uuid";
 
 import Input from "../Shared/Input";
 import Button from "../Shared/Button";
 import LoadingSpinner from "../Shared/LoadingSpinner";
-import { AuthContext } from "../Shared/Context/auth-context";
+// import { AuthContext } from "../Shared/Context/auth-context";
 import "./Home.css";
-import Friend from "../Chat/Friends/Friend";
+// import Friend from "../Chat/Friends/Friend";
 
 const Home = () => {
-  const auth = useContext(AuthContext);
+  // const auth = useContext(AuthContext);
   const [loginForm, setLoginForm] = useState(false);
   const [signupForm, setSignupForm] = useState(false);
   const [displayText, setDisplayText] = useState(true);

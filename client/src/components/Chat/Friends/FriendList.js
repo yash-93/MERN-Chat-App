@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import Friend from "./Friend";
 import "./FriendList.css";
 
 const FriendList = (props) => {
-  const [friendList, setFriendList] = useState(props.friendList);
+  // const [friendList, setFriendList] = useState(props.friendList);
 
   return (
     <div id={props.id}>

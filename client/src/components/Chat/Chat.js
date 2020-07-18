@@ -76,7 +76,7 @@ const Chat = () => {
     // socket.emit("join", { user, userId }, () => {});
     socket.emit("join", { user }, () => {});
     console.log(socket);
-  }, []);
+  }, [user]);
 
   const messageSectionHandler = (name) => {
     setCurrentChat(name);
