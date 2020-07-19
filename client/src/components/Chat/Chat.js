@@ -12,6 +12,8 @@ const Chat = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [room, setRoom] = useState(null);
   const [friendList, setFriendList] = useState([]);
+  const [onlineFriendsList, setOnlineFriendsList] = useState([]);
+  const [test, setTest] = useState(false);
   const ENDPOINT = "http://localhost:5000";
   var user;
   var friendIdList;
@@ -50,12 +52,12 @@ const Chat = () => {
   const fetchData = async () => {
     try {
       if (user) {
-        const result = await fetch(
-          `http://localhost:5000/api/users/${user.userId}`
-        );
-        // userId = user.userId;
-        const responseData = await result.json();
-        friendIdList = responseData.user.friends;
+        // const result = await fetch(
+        //   `http://localhost:5000/api/users/${user.userId}`
+        // );
+        // const responseData = await result.json();
+        // friendIdList = responseData.user.friends;
+        friendIdList = onlineFriendsList;
         console.log(friendIdList.length);
         getFriendData();
       } else {
@@ -69,14 +71,35 @@ const Chat = () => {
   useEffect(() => {
     user = JSON.parse(localStorage.getItem("userData"));
     fetchData();
-  }, [friendIdList]);
+  }, [friendIdList, onlineFriendsList]);
 
   useEffect(() => {
     socket = io(ENDPOINT);
     // socket.emit("join", { user, userId }, () => {});
-    socket.emit("join", { user }, () => {});
+    socket.emit("join", { user });
     console.log(socket);
+    socket.on("myOnlineFriends", (temp2, callback) => {
+      setOnlineFriendsList(temp2);
+      console.log(typeof temp2);
+    });
+    socket.on("updateFriends", (temp3) => {
+      setFriendList([]);
+      setOnlineFriendsList(temp3);
+      // setTest(!test);
+    });
+    // socket.on("my msg", (t) => {
+    //   setTest(t);
+    // });
   }, [user]);
+
+  // useEffect(() => {
+  //   socket.on("updateFriends", (userOnlineFriends, callback) => {
+  //     var temp = []
+  //     temp = userOnlineFriends
+  //     setOnlineFriendsList(userOnlineFriends);
+  //     setTest(!test);
+  //   });
+  // }, []);
 
   const messageSectionHandler = (name) => {
     setCurrentChat(name);
@@ -103,6 +126,7 @@ const Chat = () => {
         />
         <MessageSection selectedFriend={currentChat} />
       </div>
+      {/* {test && <div>hey there</div>} */}
     </React.Fragment>
   );
 };

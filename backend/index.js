@@ -70,14 +70,7 @@ io.on("connection", (socket) => {
     console.log("User Friends", userFriends);
     //console.log([...userFriends.get(socket.id)]);
 
-    var keys = [...onlineUsers.keys()];
-    // function getKeyByValue(value) {
-    //   for (var i = 0; i < keys.length; i++) {
-    //     if (onlineUsers.get(keys[i]) === value) {
-    //       return keys[i];
-    //     }
-    //   }
-    // }
+    //var keys = [...onlineUsers.keys()];
 
     var temp2 = [];
     var friends = userFriends.get(user.userId);
@@ -95,14 +88,35 @@ io.on("connection", (socket) => {
     for (var i = 0; i < temp2.length; i++) {
       var temp3 = userOnlineFriends.get(temp2[i]);
       temp3.push(user.userId);
-      // var u = getKeyByValue(temp2[i]);
-      // var temp3 = userOnlineFriends.get(u);
-      // temp3.push(onlineUsers.get(socket.id));
       userOnlineFriends.set(temp2[i], temp3);
     }
-    console.log("User Online Friends", userOnlineFriends);
+    // for (var p = 0; p < temp2.length; p++) {
+    //   if (
+    //     onlineUsers.has("5ee9ef96da4292eba881eabd") &&
+    //     "5ee9ef96da4292eba881eabd" !== user.userId
+    //   ) {
+    //     let t = true;
+    //     socket
+    //       .to(onlineUsers.get("5ee9ef96da4292eba881eabd"))
+    //       .emit("updateFriends", t);
+    //     console.log(p, " ", onlineUsers.get(temp2[p]));
+    //   }
+    // }
 
-    //socket.emit("connectedUsers", { currentUserOnlineFriends }, () => {});
+    // console.log("**", temp2);
+    socket.emit("myOnlineFriends", temp2);
+    // socket.emit("myOnlineFriends",  temp2 , () => {
+    //   console.log("User Online Friends", userOnlineFriends);
+    // });
+
+    let z;
+    for (var i = 0; i < temp2.length; i++) {
+      z = userOnlineFriends.get(temp2[i]);
+      socket.to(onlineUsers.get(temp2[i])).emit("updateFriends", z);
+      console.log(i, " ", onlineUsers.get(temp2[i]), " ", z);
+    }
+
+    console.log("User Online Friends", userOnlineFriends);
   });
   // socket.on("join", ({ currentChat, room }, callback) => {
   //   if (currentChat) {
@@ -118,12 +132,20 @@ io.on("connection", (socket) => {
     // //var fr = Array.from(userOnlineFriends.keys());
 
     temp2 = userOnlineFriends.get(u);
-    console.log(temp2);
+    // console.log(temp2);
     for (var i = 0; i < temp2.length; i++) {
       temp3 = userOnlineFriends.get(temp2[i]);
       temp3.splice(temp3.indexOf(u), 1);
       userOnlineFriends.set(temp2[i], temp3);
+      socket.to(onlineUsers.get(temp2[i])).emit("updateFriends", temp2[i]);
     }
+
+    // let z;
+    // for (var i = 0; i < temp2.length; i++) {
+    //   z = userOnlineFriends.get(temp2[i]);
+    //   socket.to(onlineUsers.get(temp2[i])).emit("updateFriends", z);
+    //   console.log(i, " ", onlineUsers.get(temp2[i]), " ", z);
+    // }
 
     userOnlineFriends.delete(u);
     console.log("*****");
