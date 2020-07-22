@@ -118,6 +118,22 @@ io.on("connection", (socket) => {
 
     console.log("User Online Friends", userOnlineFriends);
   });
+
+  socket.on("chatting", (data) => {
+    //console.log(data.msg + " " + data.id + " " + data.receiver);
+    socket.to(onlineUsers.get(data.receiver)).emit("receiverPeer", {
+      msg: data.msg,
+      id: data.id,
+      receiver: onlineUsers.get(data.receiver),
+    });
+    // .emit("receiverPeer", (msg, socket.id, onlineUsers.get(receiverID)));
+    socket.emit("senderPeer", {
+      msg: data.msg,
+      id: data.id,
+      receiver: onlineUsers.get(data.receiver),
+    });
+  });
+
   // socket.on("join", ({ currentChat, room }, callback) => {
   //   if (currentChat) {
   //     console.log(currentChat + " connected to " + room);

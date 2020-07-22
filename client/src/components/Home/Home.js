@@ -50,6 +50,7 @@ const Home = () => {
             userId: responseData.id,
             token: responseData.token,
             friends: responseData.friends,
+            username: responseData.username,
           })
         );
         // history.replace(`/${responseData.id}`);

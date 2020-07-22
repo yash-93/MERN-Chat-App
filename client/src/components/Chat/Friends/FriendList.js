@@ -12,6 +12,7 @@ const FriendList = (props) => {
         props.friendList.map((friend) => (
           <Friend
             key={friend.id}
+            id={friend.id}
             username={friend.username}
             messageSectionHandler={props.messageSectionHandler}
           ></Friend>

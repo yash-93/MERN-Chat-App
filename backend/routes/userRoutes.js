@@ -68,6 +68,7 @@ router.post("/login", async (req, res, next) => {
     id: existingUser.id,
     token: token,
     friends: existingUser.friends,
+    username: existingUser.username,
   });
 });
 

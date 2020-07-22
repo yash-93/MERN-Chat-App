@@ -10,7 +10,9 @@ const Friend = (props) => {
         <img className="profile-pic" src={profile} alt="pic" />
         <label
           className="username"
-          onClick={() => props.messageSectionHandler(`${props.username}`)}
+          onClick={() =>
+            props.messageSectionHandler(`${props.username}`, `${props.id}`)
+          }
         >
           {props.username}
         </label>

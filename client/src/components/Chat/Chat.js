@@ -10,10 +10,14 @@ let socket;
 
 const Chat = () => {
   const [currentChat, setCurrentChat] = useState(null);
+  const [receiverId, setReceiverId] = useState(null);
   const [room, setRoom] = useState(null);
   const [friendList, setFriendList] = useState([]);
   const [onlineFriendsList, setOnlineFriendsList] = useState([]);
-  const [test, setTest] = useState(false);
+  const [msgs, setMsgs] = useState([
+    { user: "Yashdeep", text: "Hi" },
+    { user: "Prasun", text: "Hi" },
+  ]);
   const ENDPOINT = "http://localhost:5000";
   var user;
   var friendIdList;
@@ -87,21 +91,24 @@ const Chat = () => {
       setOnlineFriendsList(temp3);
       // setTest(!test);
     });
+
+    socket.on("receiverPeer", (data) => {
+      //window.open("https://www.w3schools.com");
+      var temp = { user: user.username, text: data.msg };
+      setMsgs((msgs) => [...msgs, temp]);
+    });
+
+    socket.on("senderPeer", (data) => {
+      var temp = { user: user.username, text: data.msg };
+      setMsgs((msgs) => [...msgs, temp]);
+    });
     // socket.on("my msg", (t) => {
     //   setTest(t);
     // });
   }, [user]);
 
-  // useEffect(() => {
-  //   socket.on("updateFriends", (userOnlineFriends, callback) => {
-  //     var temp = []
-  //     temp = userOnlineFriends
-  //     setOnlineFriendsList(userOnlineFriends);
-  //     setTest(!test);
-  //   });
-  // }, []);
-
-  const messageSectionHandler = (name) => {
+  const messageSectionHandler = (name, id) => {
+    setReceiverId(id);
     setCurrentChat(name);
     setRoom("room" + name);
     // socket = io("http://localhost:5000");
@@ -115,6 +122,11 @@ const Chat = () => {
     // };
   };
 
+  const messageHandler = (msg, id, receiver) => {
+    //alert(msg + "," + id + "," + receiverId);
+    socket.emit("chatting", { msg, id, receiver });
+  };
+
   return (
     <React.Fragment>
       <Navbar />
@@ -124,7 +136,12 @@ const Chat = () => {
           messageSectionHandler={messageSectionHandler}
           friendList={friendList}
         />
-        <MessageSection selectedFriend={currentChat} />
+        <MessageSection
+          selectedFriend={currentChat}
+          messageHandler={messageHandler}
+          receiverId={receiverId}
+          msgs={msgs}
+        />
       </div>
       {/* {test && <div>hey there</div>} */}
     </React.Fragment>
