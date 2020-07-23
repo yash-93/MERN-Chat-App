@@ -14,10 +14,7 @@ const Chat = () => {
   const [room, setRoom] = useState(null);
   const [friendList, setFriendList] = useState([]);
   const [onlineFriendsList, setOnlineFriendsList] = useState([]);
-  const [msgs, setMsgs] = useState([
-    { user: "Yashdeep", text: "Hi" },
-    { user: "Prasun", text: "Hi" },
-  ]);
+  const [msgs, setMsgs] = useState([]);
   const ENDPOINT = "http://localhost:5000";
   var user;
   var friendIdList;
@@ -93,13 +90,12 @@ const Chat = () => {
     });
 
     socket.on("receiverPeer", (data) => {
-      //window.open("https://www.w3schools.com");
-      var temp = { user: user.username, text: data.msg };
+      var temp = { user: user.username, text: data.msg, name: data.senderName };
       setMsgs((msgs) => [...msgs, temp]);
     });
 
     socket.on("senderPeer", (data) => {
-      var temp = { user: user.username, text: data.msg };
+      var temp = { user: user.username, text: data.msg, name: data.senderName };
       setMsgs((msgs) => [...msgs, temp]);
     });
     // socket.on("my msg", (t) => {
@@ -108,23 +104,14 @@ const Chat = () => {
   }, [user]);
 
   const messageSectionHandler = (name, id) => {
-    setReceiverId(id);
     setCurrentChat(name);
+    setReceiverId(id);
     setRoom("room" + name);
-    // socket = io("http://localhost:5000");
-    // if (currentChat) {
-    //   socket.emit("join", { currentChat, room }, () => {});
-    //   console.log(socket);
-    // }
-    // return () => {
-    //   socket.emit("disconnect");
-    //   socket.off();
-    // };
   };
 
-  const messageHandler = (msg, id, receiver) => {
+  const messageHandler = (msg, id, receiver, senderName) => {
     //alert(msg + "," + id + "," + receiverId);
-    socket.emit("chatting", { msg, id, receiver });
+    socket.emit("chatting", { msg, id, receiver, senderName });
   };
 
   return (

@@ -21,10 +21,9 @@ const MessageSection = (props) => {
   // ]);
   const [msg, setMsg] = useState();
   const [receiverId, setReceiverId] = useState();
-  var name = "Yashdeep";
   var list = props.msgs.map((message, i) => (
     <div key={i}>
-      <Message user={message.user} text={message.text} name={message.user} />
+      <Message user={message.user} text={message.text} name={message.name} />
     </div>
   ));
 
@@ -47,7 +46,7 @@ const MessageSection = (props) => {
   const sendMessge = (event) => {
     event.preventDefault();
     var user = JSON.parse(localStorage.getItem("userData"));
-    props.messageHandler(`${msg}`, user.userId, receiverId);
+    props.messageHandler(`${msg}`, user.userId, receiverId, user.username);
   };
 
   return (

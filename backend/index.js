@@ -124,13 +124,15 @@ io.on("connection", (socket) => {
     socket.to(onlineUsers.get(data.receiver)).emit("receiverPeer", {
       msg: data.msg,
       id: data.id,
-      receiver: onlineUsers.get(data.receiver),
+      receiverid: onlineUsers.get(data.receiver),
+      senderName: data.senderName,
     });
     // .emit("receiverPeer", (msg, socket.id, onlineUsers.get(receiverID)));
     socket.emit("senderPeer", {
       msg: data.msg,
       id: data.id,
       receiver: onlineUsers.get(data.receiver),
+      senderName: data.senderName,
     });
   });
 
