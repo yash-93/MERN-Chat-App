@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import io from "socket.io-client";
 
 import FriendList from "./Friends/FriendList";
 import MessageSection from "./Messages/MessageSection";
 import "./Chat.css";
 import Navbar from "./NavBar/Navbar";
+import UserContext from "../UserContext";
 
 let socket;
 
 const Chat = () => {
+  const context = useContext(UserContext);
   const [currentChat, setCurrentChat] = useState(null);
   const [receiverId, setReceiverId] = useState(null);
   const [room, setRoom] = useState(null);
@@ -72,7 +74,16 @@ const Chat = () => {
   useEffect(() => {
     user = JSON.parse(localStorage.getItem("userData"));
     fetchData();
-  }, [friendIdList, onlineFriendsList]);
+  }, [onlineFriendsList]);
+
+  useEffect(() => {
+    user.friends.map((f) => {
+      // localStorage.setItem(`msgs_${friend.username}`, []);
+      if (!localStorage.getItem(`msgs_${f}`)) {
+        localStorage.setItem(`msgs_${f}`, JSON.stringify(new Array()));
+      }
+    });
+  }, []);
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -91,22 +102,42 @@ const Chat = () => {
 
     socket.on("receiverPeer", (data) => {
       var temp = { user: user.username, text: data.msg, name: data.senderName };
-      setMsgs((msgs) => [...msgs, temp]);
+      console.log(data.id + " " + context.receiverId);
+      if (data.id === context.receiverId) {
+        setMsgs((msgs) => [...msgs, temp]);
+      }
+      var temp_msgs = JSON.parse(localStorage.getItem(`msgs_${data.id}`));
+      temp_msgs.push(temp);
+      localStorage.setItem(`msgs_${data.id}`, JSON.stringify(temp_msgs));
+      console.log(temp_msgs);
     });
 
     socket.on("senderPeer", (data) => {
       var temp = { user: user.username, text: data.msg, name: data.senderName };
+      console.log(context.receiverId);
       setMsgs((msgs) => [...msgs, temp]);
+      var temp_msgs = JSON.parse(
+        localStorage.getItem(`msgs_${context.receiverId}`)
+      );
+      temp_msgs.push(temp);
+      localStorage.setItem(
+        `msgs_${context.receiverId}`,
+        JSON.stringify(temp_msgs)
+      );
+      console.log(temp_msgs);
     });
-    // socket.on("my msg", (t) => {
-    //   setTest(t);
-    // });
   }, [user]);
 
   const messageSectionHandler = (name, id) => {
+    user = JSON.parse(localStorage.getItem("userData"));
     setCurrentChat(name);
     setReceiverId(id);
+    context.receiverId = id;
+    console.log(receiverId);
     setRoom("room" + name);
+    let show_msgs = JSON.parse(localStorage.getItem(`msgs_${id}`));
+    console.log(show_msgs);
+    setMsgs(show_msgs);
   };
 
   const messageHandler = (msg, id, receiver, senderName) => {
@@ -123,12 +154,14 @@ const Chat = () => {
           messageSectionHandler={messageSectionHandler}
           friendList={friendList}
         />
-        <MessageSection
-          selectedFriend={currentChat}
-          messageHandler={messageHandler}
-          receiverId={receiverId}
-          msgs={msgs}
-        />
+        <UserContext.Provider value={context.receiverId}>
+          <MessageSection
+            selectedFriend={currentChat}
+            messageHandler={messageHandler}
+            receiverId={receiverId}
+            msgs={msgs}
+          />
+        </UserContext.Provider>
       </div>
       {/* {test && <div>hey there</div>} */}
     </React.Fragment>
