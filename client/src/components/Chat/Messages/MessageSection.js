@@ -6,19 +6,6 @@ import "./MessageSection.css";
 import Message from "./Message/Message";
 
 const MessageSection = (props) => {
-  // const [msgs, setMsgs] = useState([
-  //   { user: "Yashdeep", text: "Hi" },
-  //   { user: "Prasun", text: "Hi" },
-  //   { user: "Yashdeep", text: "HRU" },
-  //   { user: "Prasun", text: "IMF9" },
-  //   { user: "Yashdeep", text: "GR8" },
-  //   { user: "Prasun", text: "Yeah" },
-  //   { user: "Yashdeep", text: "Hello" },
-  //   { user: "Prasun", text: "Hi" },
-  //   { user: "Yashdeep", text: "HRU" },
-  //   { user: "Prasun", text: "IMF9" },
-  //   { user: "Yashdeep", text: "GR8" },
-  // ]);
   const [msg, setMsg] = useState();
   const [receiverId, setReceiverId] = useState();
   var list = props.msgs.map((message, i) => (
@@ -33,15 +20,6 @@ const MessageSection = (props) => {
     var id = document.getElementById("endofchatbox");
     id.scrollIntoView({ behavior: "smooth" });
   });
-
-  // const sendMessageHandler = (event) => {
-  //   event.preventDefault();
-  //   tempMsg.user = name;
-  //   tempMsg.text = msg;
-  //   setMsgs([...msgs, tempMsg]);
-  //   document.getElementById("inputMsg").value = "";
-  //   setMsg(null);
-  // };
 
   const sendMessge = (event) => {
     event.preventDefault();

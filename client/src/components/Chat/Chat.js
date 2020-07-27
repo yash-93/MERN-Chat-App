@@ -20,19 +20,6 @@ const Chat = () => {
   const ENDPOINT = "http://localhost:5000";
   var user;
   var friendIdList;
-  // var userId;
-
-  // useEffect(() => {
-  //   socket = io("http://localhost:5000");
-  //   if (currentChat) {
-  //     socket.emit("join", { currentChat, room }, () => {});
-  //     console.log(socket);
-  //   }
-  //   return () => {
-  //     socket.emit("disconnect");
-  //     socket.off();
-  //   };
-  // });
 
   const getFriendData = async () => {
     try {
@@ -55,11 +42,6 @@ const Chat = () => {
   const fetchData = async () => {
     try {
       if (user) {
-        // const result = await fetch(
-        //   `http://localhost:5000/api/users/${user.userId}`
-        // );
-        // const responseData = await result.json();
-        // friendIdList = responseData.user.friends;
         friendIdList = onlineFriendsList;
         console.log(friendIdList.length);
         getFriendData();
@@ -78,7 +60,6 @@ const Chat = () => {
 
   useEffect(() => {
     user.friends.map((f) => {
-      // localStorage.setItem(`msgs_${friend.username}`, []);
       if (!localStorage.getItem(`msgs_${f}`)) {
         localStorage.setItem(`msgs_${f}`, JSON.stringify(new Array()));
       }
@@ -87,7 +68,6 @@ const Chat = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    // socket.emit("join", { user, userId }, () => {});
     socket.emit("join", { user });
     console.log(socket);
     socket.on("myOnlineFriends", (temp2, callback) => {
@@ -97,7 +77,6 @@ const Chat = () => {
     socket.on("updateFriends", (temp3) => {
       setFriendList([]);
       setOnlineFriendsList(temp3);
-      // setTest(!test);
     });
 
     socket.on("receiverPeer", (data) => {
@@ -141,7 +120,6 @@ const Chat = () => {
   };
 
   const messageHandler = (msg, id, receiver, senderName) => {
-    //alert(msg + "," + id + "," + receiverId);
     socket.emit("chatting", { msg, id, receiver, senderName });
   };
 
@@ -163,7 +141,6 @@ const Chat = () => {
           />
         </UserContext.Provider>
       </div>
-      {/* {test && <div>hey there</div>} */}
     </React.Fragment>
   );
 };

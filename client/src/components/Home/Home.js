@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-// import { v4 as uuidv4 } from "uuid";
 
 import Input from "../Shared/Input";
 import Button from "../Shared/Button";
 import LoadingSpinner from "../Shared/LoadingSpinner";
-// import { AuthContext } from "../Shared/Context/auth-context";
 import "./Home.css";
-// import Friend from "../Chat/Friends/Friend";
 
 const Home = () => {
-  // const auth = useContext(AuthContext);
   const [loginForm, setLoginForm] = useState(false);
   const [signupForm, setSignupForm] = useState(false);
   const [displayText, setDisplayText] = useState(true);
@@ -29,7 +25,6 @@ const Home = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // Authorization: "bearer" + auth.token,
           },
           body: JSON.stringify({
             username: username,
@@ -43,7 +38,6 @@ const Home = () => {
         }
         console.log(responseData);
         setIsLoading(false);
-        //auth.login(responseData.id, responseData.token, responseData.friends);
         localStorage.setItem(
           "userData",
           JSON.stringify({
@@ -53,7 +47,6 @@ const Home = () => {
             username: responseData.username,
           })
         );
-        // history.replace(`/${responseData.id}`);
         window.location.replace(`/${responseData.id}`);
       } catch (err) {
         console.log(err);

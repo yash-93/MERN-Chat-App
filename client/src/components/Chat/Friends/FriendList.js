@@ -4,8 +4,6 @@ import Friend from "./Friend";
 import "./FriendList.css";
 
 const FriendList = (props) => {
-  // const [friendList, setFriendList] = useState(props.friendList);
-
   return (
     <div id={props.id}>
       {props.friendList &&
