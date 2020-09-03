@@ -3,9 +3,10 @@ import io from "socket.io-client";
 
 import FriendList from "./Friends/FriendList";
 import MessageSection from "./Messages/MessageSection";
-import "./Chat.css";
 import Navbar from "./NavBar/Navbar";
+import Slider from "../Slider/Slider";
 import UserContext from "../UserContext";
+import "./Chat.css";
 
 let socket;
 
@@ -141,6 +142,7 @@ const Chat = () => {
           />
         </UserContext.Provider>
       </div>
+      <Slider />
     </React.Fragment>
   );
 };

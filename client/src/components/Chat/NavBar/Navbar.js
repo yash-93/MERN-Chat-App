@@ -1,16 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 // import profile from "../../../images/profile.png";
 import "./Navbar.css";
 import { AuthContext } from "../../Shared/Context/auth-context";
 
 const Navbar = () => {
+  const [username, setUserName] = useState();
+
   const auth = useContext(AuthContext);
   const logoutHandler = (event) => {
     auth.logout();
     // history.push("/");
     window.location.replace("/");
   };
+  let user;
+  useEffect(() => {
+    user = JSON.parse(localStorage.getItem("userData"));
+    setUserName(user.username);
+  }, []);
 
   return (
     <div id="navbar">
@@ -25,7 +32,12 @@ const Navbar = () => {
           </a>
         </li>
         <li style={{ float: "right" }}>
-          <a href="#username">USERNAME</a>
+          <a href="#username">{username}</a>
+        </li>
+        <li style={{ float: "right" }}>
+          <a href="#search">
+            <i className="fas fa-search" style={{ color: "white" }}></i>
+          </a>
         </li>
         {/* <li style={{ float: "right" }}>
           <a>
