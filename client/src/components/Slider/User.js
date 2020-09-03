@@ -22,13 +22,13 @@ const User = () => {
 
       {addUser ? (
         <i
-          class="add_user_slider fas fa-check fa-2x"
+          className="add_user_slider fas fa-check fa-2x"
           style={{ color: "green" }}
           onClick={handleSendRequest}
         ></i>
       ) : (
         <i
-          class="add_user_slider fas fa-plus fa-2x"
+          className="add_user_slider fas fa-plus fa-2x"
           style={{ color: "grey" }}
           onClick={handleSendRequest}
         ></i>

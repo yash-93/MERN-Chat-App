@@ -4,8 +4,12 @@ import React, { useContext, useEffect, useState } from "react";
 import "./Navbar.css";
 import { AuthContext } from "../../Shared/Context/auth-context";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [username, setUserName] = useState();
+
+  const handleSlider = () => {
+    props.handleSlider();
+  };
 
   const auth = useContext(AuthContext);
   const logoutHandler = (event) => {
@@ -34,7 +38,7 @@ const Navbar = () => {
         <li style={{ float: "right" }}>
           <a href="#username">{username}</a>
         </li>
-        <li style={{ float: "right" }}>
+        <li style={{ float: "right" }} onClick={handleSlider}>
           <a href="#search">
             <i className="fas fa-search" style={{ color: "white" }}></i>
           </a>

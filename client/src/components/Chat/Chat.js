@@ -18,9 +18,14 @@ const Chat = () => {
   const [friendList, setFriendList] = useState([]);
   const [onlineFriendsList, setOnlineFriendsList] = useState([]);
   const [msgs, setMsgs] = useState([]);
+  const [showSlider, setShowSlider] = useState(false);
   const ENDPOINT = "http://localhost:5000";
   var user;
   var friendIdList;
+
+  const handleSlider = () => {
+    setShowSlider(!showSlider);
+  };
 
   const getFriendData = async () => {
     try {
@@ -126,7 +131,7 @@ const Chat = () => {
 
   return (
     <React.Fragment>
-      <Navbar />
+      <Navbar handleSlider={handleSlider} />
       <div id="main-chat-container">
         <FriendList
           id="friend-list"
@@ -142,7 +147,7 @@ const Chat = () => {
           />
         </UserContext.Provider>
       </div>
-      <Slider />
+      {showSlider && <Slider handleSlider={handleSlider} />}
     </React.Fragment>
   );
 };

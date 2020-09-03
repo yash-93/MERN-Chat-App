@@ -20,6 +20,7 @@
 
 #close_slider {
   width: 25%;
+  cursor: pointer;
 }
 
 #close_slider i {
