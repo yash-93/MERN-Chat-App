@@ -3,9 +3,10 @@ import io from "socket.io-client";
 
 import FriendList from "./Friends/FriendList";
 import MessageSection from "./Messages/MessageSection";
-import "./Chat.css";
 import Navbar from "./NavBar/Navbar";
+import Slider from "../Slider/Slider";
 import UserContext from "../UserContext";
+import "./Chat.css";
 
 let socket;
 
@@ -17,9 +18,14 @@ const Chat = () => {
   const [friendList, setFriendList] = useState([]);
   const [onlineFriendsList, setOnlineFriendsList] = useState([]);
   const [msgs, setMsgs] = useState([]);
+  const [showSlider, setShowSlider] = useState(false);
   const ENDPOINT = "http://localhost:5000";
   var user;
   var friendIdList;
+
+  const handleSlider = () => {
+    setShowSlider(!showSlider);
+  };
 
   const getFriendData = async () => {
     try {
@@ -125,7 +131,7 @@ const Chat = () => {
 
   return (
     <React.Fragment>
-      <Navbar />
+      <Navbar handleSlider={handleSlider} showSlider={showSlider} />
       <div id="main-chat-container">
         <FriendList
           id="friend-list"
@@ -141,6 +147,9 @@ const Chat = () => {
           />
         </UserContext.Provider>
       </div>
+      {showSlider && (
+        <Slider handleSlider={handleSlider} showSlider={showSlider} />
+      )}
     </React.Fragment>
   );
 };
