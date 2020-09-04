@@ -1,17 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import User from "./User";
 import "./Slider.css";
 
 const Slider = (props) => {
-  const [showSlider, setShowSlider] = useState(false);
+  const [showSlider, setShowSlider] = useState(props.showSlider);
+  const [users, setUsers] = useState();
+  const ENDPOINT = "http://localhost:5000";
+  let me;
+  let allUsers;
+
+  const checkUser = (user) => {
+    return user.username !== me.username;
+  };
+
+  const getUsers = async () => {
+    try {
+      allUsers = await fetch("http://localhost:5000/api/users");
+      const responseData = await allUsers.json();
+      let temp = responseData.filter(checkUser);
+      setUsers(temp);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    me = JSON.parse(localStorage.getItem("userData"));
+    console.log(me.username); //
+    getUsers();
+  }, []);
 
   const handleSlider = () => {
     props.handleSlider();
   };
 
   return (
-    <div id="slider">
+    <div id="slider" className={showSlider && "slide-in"}>
       <div id="slider_header">
         <h3>Add Friends</h3>
         <div id="close_slider">
@@ -19,15 +44,13 @@ const Slider = (props) => {
         </div>
       </div>
       <hr></hr>
-
-      <User />
-      <div id="hr"></div>
-      <User />
-      <div id="hr"></div>
-      <User />
-      <div id="hr"></div>
-      <User />
-      <div id="hr"></div>
+      {users &&
+        users.map((u) => (
+          <React.Fragment key={u._id}>
+            <User id={u.id} uname={u.username} />
+            <div id="hr"></div>
+          </React.Fragment>
+        ))}
     </div>
   );
 };

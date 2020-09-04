@@ -131,7 +131,7 @@ const Chat = () => {
 
   return (
     <React.Fragment>
-      <Navbar handleSlider={handleSlider} />
+      <Navbar handleSlider={handleSlider} showSlider={showSlider} />
       <div id="main-chat-container">
         <FriendList
           id="friend-list"
@@ -147,7 +147,9 @@ const Chat = () => {
           />
         </UserContext.Provider>
       </div>
-      {showSlider && <Slider handleSlider={handleSlider} />}
+      {showSlider && (
+        <Slider handleSlider={handleSlider} showSlider={showSlider} />
+      )}
     </React.Fragment>
   );
 };

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import profile from "../../images/profile.png";
 import "./User.css";
 
-const User = () => {
+const User = (props) => {
   const [addUser, setAddUser] = useState(false);
 
   const handleSendRequest = () => {
@@ -18,7 +18,7 @@ const User = () => {
         src={profile}
         alt="pic"
       />
-      <label id="username_user_slider">Yashdeep Bachhas</label>
+      <label id="username_user_slider">{props.uname}</label>
 
       {addUser ? (
         <i
