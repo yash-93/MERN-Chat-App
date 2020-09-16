@@ -20,6 +20,14 @@ A basic web application to chat with other people built using MERN.
   <img height="500" width="700" src="https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_1.png">
   <img height="500" width="700" src="https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_4.png">
 
+- Dashboard shows your online friends
+
+  <img height="500" width="700" src="https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_2.png">
+
+- Select from the list and start chatting
+
+  <img height="500" width="700" src="https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_3.png">
+
 ## Credits
 
 This web app uses the following packages:
