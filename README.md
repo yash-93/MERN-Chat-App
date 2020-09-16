@@ -28,6 +28,10 @@ A basic web application to chat with other people built using MERN.
 
  <img height="500" width="800" src="https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_3.png">
 
+> **Click on search icon and send friend requests to people**
+
+ <img height="500" width="800" src="https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_5.png">
+
 ## Credits
 
 This web app uses the following packages:
