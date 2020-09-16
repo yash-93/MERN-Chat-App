@@ -16,7 +16,7 @@ A basic web application to chat with other people built using MERN.
 ## Usage
 
 - Login or create an account
-  <img height="200" width="200" src="https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_1.png"> ![Signup](https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_4.png)
+  <img height="500" width="500" src="https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_1.png"> <img height="500" width="500" src="https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_4.png">
 
 ## Credits
 
