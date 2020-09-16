@@ -16,7 +16,7 @@ A basic web application to chat with other people built using MERN.
 ## Usage
 
 - Login or create an account
-  ![Home]()
+  ![Home](https://raw.githubusercontent.com/yash-93/MERN-Chat-App/master/static/chatApp_1.png)
 
 ## Credits
 
