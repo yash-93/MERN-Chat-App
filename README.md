@@ -2,9 +2,9 @@
 
 A basic web application to chat with other people built using MERN.
 
-- [Key Features]()
-- [Usage]()
-- [Credits]()
+- [Key Features](https://github.com/yash-93/MERN-Chat-App/blob/yash/README.md#key-features)
+- [Usage](https://github.com/yash-93/MERN-Chat-App/blob/yash/README.md#usage)
+- [Credits](https://github.com/yash-93/MERN-Chat-App/blob/yash/README.md#credits)
 
 ## Key Features
 
@@ -16,7 +16,7 @@ A basic web application to chat with other people built using MERN.
 ## Usage
 
 - Login or create an account
-  ![Home]()
+  ![Home](https://raw.githubusercontent.com/yash-93/MERN-Chat-App/master/static/chatApp_1.png) ![Signup](https://raw.githubusercontent.com/yash-93/MERN-Chat-App/yash/static/chatApp_4.png)
 
 ## Credits
 
