@@ -21,7 +21,7 @@ const Home = () => {
     if (loginForm) {
       try {
         setIsLoading(true);
-        const response = await fetch("http://localhost:5000/api/users/login", {
+        const response = await fetch(`${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/users/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const Home = () => {
     } else if (signupForm) {
       try {
         setIsLoading(true);
-        const response = await fetch("http://localhost:5000/api/users/signup", {
+        const response = await fetch(`${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/users/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

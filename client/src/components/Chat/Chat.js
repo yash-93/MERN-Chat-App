@@ -19,7 +19,7 @@ const Chat = () => {
   const [onlineFriendsList, setOnlineFriendsList] = useState([]);
   const [msgs, setMsgs] = useState([]);
   const [showSlider, setShowSlider] = useState(false);
-  const ENDPOINT = "http://localhost:5000";
+  const ENDPOINT = `${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}`;
   var user;
   var friendIdList;
 
@@ -31,7 +31,7 @@ const Chat = () => {
     try {
       for (var i = 0; i < friendIdList.length; i++) {
         const result = await fetch(
-          `http://localhost:5000/api/users/${friendIdList[i]}`
+          `${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/users/${friendIdList[i]}`
         );
         const responseData = await result.json();
         var temp = {};

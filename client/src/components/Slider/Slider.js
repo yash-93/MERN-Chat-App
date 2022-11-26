@@ -6,7 +6,6 @@ import "./Slider.css";
 const Slider = (props) => {
   const [showSlider, setShowSlider] = useState(props.showSlider);
   const [users, setUsers] = useState();
-  const ENDPOINT = "http://localhost:5000";
   let me;
   let allUsers;
 
@@ -16,7 +15,7 @@ const Slider = (props) => {
 
   const getUsers = async () => {
     try {
-      allUsers = await fetch("http://localhost:5000/api/users");
+      allUsers = await fetch(`${process.env.REACT_APP_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/api/users`);
       const responseData = await allUsers.json();
       let temp = responseData.filter(checkUser);
       setUsers(temp);
