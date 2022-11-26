@@ -4,6 +4,8 @@ const http = require("http");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const dotenv = require('dotenv');
+dotenv.config();
 
 const userRoutes = require("./routes/userRoutes");
 const { disconnect, on } = require("process");
@@ -111,12 +113,13 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://chat_app_user:BSngbnMhVPbCv8uL@cluster0-fpul6.mongodb.net/chatapp?retryWrites=true&w=majority",
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.fpul6.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
   )
   .then(() => {
-    server.listen(5000);
+    server.listen(process.env.PORT);
+    console.log("Connected to Database");
   })
   .catch((error) => {
-    console.log(err);
+    console.log(error);
   });
